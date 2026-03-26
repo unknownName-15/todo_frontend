@@ -1,16 +1,53 @@
-# React + Vite
+# Focus. - To-Do List Application (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+초보자도 쉽게 코드를 이해하고 협업할 수 있도록 작성된 Focus. 프로젝트의 프론트엔드 API 및 기능 명세서입니다.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 1. Feature List
 
-## React Compiler
+이 프로젝트는 사용자가 일상과 일정을 체계적으로 관리할 수 있도록 돕는 웹 애플리케이션입니다. 제공하는 주요 기능은 다음과 같습니다:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **구글 로그인 지원 (Google OAuth)**
+  - 구글 계정을 통해 간편하게 로그인/로그아웃 할 수 있습니다. 데이터는 사용자 계정별로 안전하게 보관됩니다. (인증 정보는 로컬스토리지에 JWT 토큰으로 보관)
+  
+- **할일(Todo) 정리 및 관리**
+  - **할일 등록**: 내용과 함께 **마감일(D-day)**, **중요도(가장 중요 / 중요 / 보통)**를 설정하여 추가할 수 있습니다.
+  - **할일 모아보기**: 중요도에 따라 탭으로 분류되어 급한 일부터 차근차근 해결할 수 있습니다.
+  - **수정 및 삭제**: 기재한 할일 내용을 손쉽게 수정하거나 버튼을 클릭해 삭제/완료 처리할 수 있습니다.
+  - **직관적인 D-day 표시**: 마감일이 다가올수록 색상 뱃지(오늘, 남은 날짜, 지난 날짜 등)가 변하여 시각적으로 쉽게 인지할 수 있습니다.
 
-## Expanding the ESLint configuration
+- **스마트 캘린더 기능**
+  - **일정 스케줄링**: 일별, 주별, 월별 보기 모드를 지원하여 시간대별로 자세한 일정을 기록할 수 있습니다.
+  - **할일 연동**: 캘린더에 등록된 일정을 클릭하면 버튼 하나로 메인 "할일 목록(Todo)"으로 가져올 수 있어 일정 관리가 더욱 편해집니다.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+### 2. API Documentation
+
+프론트엔드가 백엔드 서버(http://localhost:4000)와 통신하기 위해 내부적으로 사용하는 API 목록입니다. 데이터는 `axios`를 통해 JSON 형식으로 주고받습니다. (모든 요청에는 로컬 스토리지에 저장된 사용자 Token이 자동 포함됩니다.)
+
+#### 할일 (Todos) API
+
+| HTTP Method | API Endpoint | 역할 및 설명 | 요청 본문(Payload) |
+| --- | --- | --- | --- |
+| **GET** | `/todos` | **할일 목록 가져오기**<br>사용자가 등록한 전체 할일 데이터를 마감일/우선순위에 맞추어 정렬 후 불러옵니다. | 없음 |
+| **POST** | `/todos` | **새 할일 등록하기**<br>사용자가 입력창에 적은 내용을 바탕으로 새로운 할일을 서버에 저장합니다. | `{ content, priority, due_date }` |
+| **PUT** | `/todos/:id` | **할일 완료 상태 토글하기**<br>체크 시 완료, 다시 체크 시 미완료 상태로 변경합니다. (id 파라미터 필요) | 없음 |
+| **PATCH** | `/todos/:id` | **할일 내용 변경하기**<br>이미 등록된 할일의 텍스트나 마감 기한을 수정합니다. | `{ content, due_date }` |
+| **PATCH** | `/todos/:id/priority` | **할일 중요도 갱신**<br>별도 클릭을 통해 중요도를 높거나 낮음 상태로 순환 변경합니다. | `{ priority: 'high' \| 'medium' \| 'none' }` |
+| **DELETE** | `/todos/:id` | **할일 삭제하기**<br>선택한 할일을 리스트 및 서버에서 영구적으로 삭제합니다. | 없음 |
+| **POST** | `/todos/from-calendar`| **일정 내용 할일로 넘기기**<br>스케줄러에 등록된 이벤트를 할일 아이템으로 복사해서 생성합니다. | `{ content, due_date, calendar_event_id }` |
+
+#### 캘린더 (Calendar) API
+
+| HTTP Method | API Endpoint | 역할 및 설명 | 요청 파라미터 / 본문 |
+| --- | --- | --- | --- |
+| **GET** | `/calendar` | **특정 기간의 일정 조회**<br>달력 보기 모드에 따라 쿼리로 날짜를 보내 일정 조각들을 가져옵니다. | Query: `?start={시작일}&end={종료일}` |
+| **POST** | `/calendar` | **빈 슬롯에 스케줄 추가**<br>사용자가 일별/주별 페이지에서 다이얼로그를 통해 스케줄을 추가합니다. | `{ title, start, end, description }` |
+| **PUT** | `/calendar/:id` | **등록된 스케줄 수정하기**<br>시간을 변경하거나 제목, 설명을 업데이트합니다. | `{ title, start, end, description }` |
+| **DELETE** | `/calendar/:id` | **등록된 스케줄 삭제**<br>잘못 등록된 일정이나 완료된 일정을 달력에서 없앱니다. | 없음 |
+
+---
+
+*참고 문서: 해당 문서는 v1.0 기준으로 작성되었으며, 지속적으로 업데이트됩니다.*
