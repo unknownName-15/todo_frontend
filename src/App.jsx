@@ -18,8 +18,21 @@ function App() {
   const [input, setInput]                   = useState('');
   const [priority, setPriority]             = useState('none');
   const [dueDate, setDueDate]               = useState('');
+  const [startTime, setStartTime]           = useState('');
+  const [endTime, setEndTime]               = useState('');
   const [calendarEvents, setCalendarEvents] = useState([]);
   const dateInputRef = useRef(null);
+  const dateInputMobileRef  = useRef(null);
+  const [startAmPm, setStartAmPm] = useState('AM');
+  const [startHour, setStartHour] = useState('12');
+  const [startMin, setStartMin] = useState('00');
+  const [endAmPm, setEndAmPm] = useState('PM');
+  const [endHour, setEndHour] = useState('12');
+  const [endMin, setEndMin] = useState('00');
+  const [timeSelected, setTimeSelected] = useState(false);
+
+  const hours = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
+  const minutes = ['00', '10', '20', '30', '40', '50'];
 
   const getFormattedDate = () => {
     const now = new Date();
@@ -100,22 +113,41 @@ function App() {
     setTodos([]);
   };
 
+  const convertTo24Hour = (ampm, hour, min) => {
+  let h = parseInt(hour);
+  if (ampm === 'AM' && h === 12) h = 0;
+  if (ampm === 'PM' && h !== 12) h = h + 12;
+  return `${String(h).padStart(2, '0')}:${min}`;
+};
+
   const handleAddTodo = async () => {
-    if (!input.trim()) return;
-    try {
-      const { data } = await api.post('/todos', {
-        content: input,
-        priority,
-        due_date: dueDate || null,
-      });
-      setTodos([data, ...todos]);
-      setInput('');
-      setPriority('none');
-      setDueDate('');
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  if (!input.trim()) return;
+  const finalStartTime = convertTo24Hour(startAmPm, startHour, startMin);
+  const finalEndTime   = convertTo24Hour(endAmPm, endHour, endMin);
+  console.log('finalStartTime:', finalStartTime);
+  console.log('finalEndTime:', finalEndTime);
+  try {
+    const { data } = await api.post('/todos', {
+      content: input,
+      priority,
+      due_date: dueDate || null,
+      start_time: dueDate ? finalStartTime : null,
+      end_time: dueDate ? finalEndTime : null,
+    });
+    setTodos([data, ...todos]);
+    setInput('');
+    setPriority('none');
+    setDueDate('');
+    setStartAmPm('AM');
+    setStartHour('12');
+    setStartMin('00');
+    setEndAmPm('PM');
+    setEndHour('12');
+    setEndMin('00');
+  } catch (e) {
+    console.error(e);
+  }
+};
 
   const handleToggle = async (id) => {
     try {
@@ -135,14 +167,19 @@ function App() {
     }
   };
 
-  const handleEdit = async (id, content, due_date) => {
-    try {
-      const { data } = await api.patch(`/todos/${id}`, { content, due_date });
-      setTodos(todos.map((t) => (t.id === id ? data : t)));
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const handleEdit = async (id, content, due_date, start_time, end_time) => {
+  try {
+    const { data } = await api.patch(`/todos/${id}`, {
+      content,
+      due_date,
+      start_time,
+      end_time,
+    });
+    setTodos(todos.map((t) => (t.id === id ? data : t)));
+  } catch (e) {
+    console.error(e);
+  }
+};
 
   const handlePriority = async (id, current) => {
     const next =
@@ -201,7 +238,7 @@ function App() {
             <div className={`line ${isMenuOpen ? 'open' : ''}`}></div>
           </button>
           <span className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            FOCUS.
+            SESSION TASK.
           </span>
         </div>
         <div className="nav-right">
@@ -246,35 +283,35 @@ function App() {
       <main className="content-container">
         <div className="todo-header">
           <span className="date-label">{getFormattedDate()}</span>
-          <h2 className="main-title">할일 목록</h2>
+          <h2 className="main-title">일정 목록</h2>
         </div>
 
         <div className="input-section">
-          <div className="input-priority">
-            <button
-              className={`priority-btn ${priority === 'high' ? 'priority-high' : 'priority-none'}`}
-              onClick={() => setPriority(priority === 'high' ? 'none' : 'high')}
-              title="가장 중요"
-              disabled={!user}
-            />
-            <button
-              className={`priority-btn ${priority === 'medium' ? 'priority-medium' : 'priority-none'}`}
-              onClick={() => setPriority(priority === 'medium' ? 'none' : 'medium')}
-              title="중요"
-              disabled={!user}
-            />
-          </div>
+  <div className="input-priority">
+    <button
+      className={`priority-btn ${priority === 'high' ? 'priority-high' : 'priority-none'}`}
+      onClick={() => setPriority(priority === 'high' ? 'none' : 'high')}
+      title="가장 중요"
+      disabled={!user}
+    />
+    <button
+      className={`priority-btn ${priority === 'medium' ? 'priority-medium' : 'priority-none'}`}
+      onClick={() => setPriority(priority === 'medium' ? 'none' : 'medium')}
+      title="중요"
+      disabled={!user}
+    />
+  </div>
 
-          <input
-            type="text"
-            placeholder={user ? '입력 후 Enter를 누르세요.' : '로그인 후 이용할 수 있습니다.'}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleAddTodo()}
-            disabled={!user}
-          />
+  <input
+    type="text"
+    placeholder={user ? '입력 후 Enter를 누르세요.' : '로그인 후 이용할 수 있습니다.'}
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    onKeyDown={(e) => e.key === 'Enter' && handleAddTodo()}
+    disabled={!user}
+  />
 
-          {/* PC: 텍스트 형태 날짜 입력 */}
+  {/* PC: 텍스트 형태 날짜 입력 */}
 <div className="due-date-wrap pc-only" onClick={() => dateInputRef.current.showPicker()}>
   <span className="due-date-label">
     {dueDate ? dueDate : 'D-day를 입력해 주세요.'}
@@ -290,10 +327,10 @@ function App() {
 </div>
 
 {/* 모바일: 달력 아이콘 버튼 */}
-<div className="due-date-wrap mobile-only-flex" onClick={() => dateInputRef.current.showPicker()}>
+<div className="due-date-wrap mobile-only-flex" onClick={() => dateInputMobileRef.current.showPicker()}>
   <i className={`ri-calendar-line ${dueDate ? 'cal-icon-active' : ''}`}></i>
   <input
-    ref={dateInputRef}
+    ref={dateInputMobileRef}
     type="date"
     className="due-date-hidden"
     value={dueDate}
@@ -302,10 +339,43 @@ function App() {
   />
 </div>
 
-          <button className="submit-icon" onClick={handleAddTodo} disabled={!user}>
-            <i className="ri-arrow-right-up-line"></i>
-          </button>
-        </div>
+  {/* 시간 입력 — 날짜 선택 후에만 표시 */}
+{dueDate && (
+  <div className="custom-time-picker pc-only">
+    <div className="time-select-group">
+      <select value={startAmPm} onChange={(e) => { setStartAmPm(e.target.value); setTimeSelected(true); }}>
+        <option value="AM">오전</option>
+        <option value="PM">오후</option>
+      </select>
+      <select value={startHour} onChange={(e) => { setStartHour(e.target.value); setTimeSelected(true); }}>
+        {hours.map(h => <option key={h} value={h}>{h}시</option>)}
+      </select>
+      <select value={startMin} onChange={(e) => { setStartMin(e.target.value); setTimeSelected(true); }}>
+        {minutes.map(m => <option key={m} value={m}>{m}분</option>)}
+      </select>
+    </div>
+
+    <span className="time-dash">~</span>
+
+    <div className="time-select-group">
+      <select value={endAmPm} onChange={(e) => { setEndAmPm(e.target.value); setTimeSelected(true); }}>
+        <option value="AM">오전</option>
+        <option value="PM">오후</option>
+      </select>
+      <select value={endHour} onChange={(e) => { setEndHour(e.target.value); setTimeSelected(true); }}>
+        {hours.map(h => <option key={h} value={h}>{h}시</option>)}
+      </select>
+      <select value={endMin} onChange={(e) => { setEndMin(e.target.value); setTimeSelected(true); }}>
+        {minutes.map(m => <option key={m} value={m}>{m}분</option>)}
+      </select>
+    </div>
+  </div>
+)}
+
+  <button className="submit-icon" onClick={handleAddTodo} disabled={!user}>
+    <i className="ri-arrow-right-up-line"></i>
+  </button>
+</div>
 
         <div className="task-list">
           {!user ? (

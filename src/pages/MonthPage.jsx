@@ -112,7 +112,7 @@ export default function MonthPage({ user, onLogout }) {
             <div className={`line ${isMenuOpen ? 'open' : ''}`}></div>
             <div className={`line ${isMenuOpen ? 'open' : ''}`}></div>
           </button>
-          <span className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>FOCUS.</span>
+          <span className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>SESSION TASK.</span>
         </div>
         <div className="nav-right">
           {user ? (
@@ -129,9 +129,6 @@ export default function MonthPage({ user, onLogout }) {
       <div className={`full-menu ${isMenuOpen ? 'active' : ''}`}>
         <div className="menu-inner">
           <ul className="main-nav">
-            <li className="nav-item">
-              <a href="#" onClick={() => { navigate('/'); setIsMenuOpen(false); }}>오늘의 할일</a>
-            </li>
             <li className="nav-item">
               <a href="#" onClick={() => { navigate('/todos'); setIsMenuOpen(false); }}>내 할일</a>
             </li>
@@ -152,22 +149,35 @@ export default function MonthPage({ user, onLogout }) {
 
       <main className="content-container">
         <div className="todo-header">
-          <span className="date-label">MONTHLY</span>
-          {/* 월 이동 버튼 */}
-          <div className="month-nav">
-            <button className="month-nav-btn" onClick={() => setCurrentMonth(currentMonth.subtract(1, 'month'))}>
-              <i className="ri-arrow-left-s-line"></i>
-            </button>
-            <h2 className="main-title">{currentMonth.format('MMMM YYYY')}</h2>
-            <button className="month-nav-btn" onClick={() => setCurrentMonth(currentMonth.add(1, 'month'))}>
-              <i className="ri-arrow-right-s-line"></i>
-            </button>
-          </div>
-        </div>
+  <span className="date-label">MONTHLY</span>
+  <div className="month-nav">
+    <button className="month-nav-btn" onClick={() => setCurrentMonth(currentMonth.subtract(1, 'month'))}>
+      <i className="ri-arrow-left-s-line"></i>
+    </button>
+    
+    <h2 className="main-title">
+      {currentMonth.format('MMMM YYYY')}
+    </h2>
+    
+    <button className="month-nav-btn" onClick={() => setCurrentMonth(currentMonth.add(1, 'month'))}>
+      <i className="ri-arrow-right-s-line"></i>
+    </button>
 
-        <button className="cal-add-btn" onClick={() => { setEditEvent(null); setForm({ title: '', start: currentMonth.format('YYYY-MM-DDT09:00'), end: currentMonth.format('YYYY-MM-DDT10:00'), description: '' }); setShowForm(true); }}>
-          <i className="ri-add-line"></i> 일정 추가
-        </button>
+    {/* 다른 페이지와 동일한 플러스 아이콘 버튼 추가 */}
+    <button className="icon-add-btn" title="일정 추가" onClick={() => {
+      setEditEvent(null);
+      setForm({
+        title: '',
+        start: currentMonth.startOf('month').format('YYYY-MM-DDT09:00'),
+        end:   currentMonth.startOf('month').format('YYYY-MM-DDT10:00'),
+        description: ''
+      });
+      setShowForm(true);
+    }}>
+      <i className="ri-add-circle-line"></i>
+    </button>
+  </div>
+</div>
 
         {showForm && (
           <div className="cal-form">

@@ -4,31 +4,32 @@ import dayjs from 'dayjs';
 import api from '../api/axios';
 
 export default function WeekPage({ user, onLogout }) {
-  const [events, setEvents]         = useState([]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentWeek, setCurrentWeek] = useState(dayjs());
+  const [events, setEvents]           = useState([]);
+  const [isMenuOpen, setIsMenuOpen]   = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
-  const [showForm, setShowForm]     = useState(false);
-  const [form, setForm]             = useState({ title: '', start: '', end: '', description: '' });
-  const [editEvent, setEditEvent]   = useState(null);
+  const [showForm, setShowForm]       = useState(false);
+  const [form, setForm]               = useState({ title: '', start: '', end: '', description: '' });
+  const [editEvent, setEditEvent]     = useState(null);
   const navigate = useNavigate();
 
-  const startOfWeek = dayjs().startOf('week');
+  const startOfWeek = currentWeek.startOf('week');
   const days = Array.from({ length: 7 }, (_, i) => startOfWeek.add(i, 'day'));
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [currentWeek]);
 
   const fetchEvents = async () => {
-  try {
-    const start = startOfWeek.toISOString();
-    const end   = startOfWeek.add(7, 'day').endOf('day').toISOString();
-    const { data } = await api.get(`/calendar?start=${start}&end=${end}`);
-    setEvents(data);
-  } catch (e) {
-    console.error(e);
-  }
-};
+    try {
+      const start = startOfWeek.toISOString();
+      const end   = startOfWeek.add(7, 'day').endOf('day').toISOString();
+      const { data } = await api.get(`/calendar?start=${start}&end=${end}`);
+      setEvents(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -67,10 +68,10 @@ export default function WeekPage({ user, onLogout }) {
   };
 
   const getEventsForDay = (day) =>
-  events.filter((e) => {
-    const eventDate = e.start?.date || e.start?.dateTime?.slice(0, 10);
-    return eventDate === day.format('YYYY-MM-DD');
-  });
+    events.filter((e) => {
+      const eventDate = e.start?.date || e.start?.dateTime?.slice(0, 10);
+      return eventDate === day.format('YYYY-MM-DD');
+    });
 
   return (
     <div className="app-wrapper">
@@ -80,14 +81,12 @@ export default function WeekPage({ user, onLogout }) {
             <div className={`line ${isMenuOpen ? 'open' : ''}`}></div>
             <div className={`line ${isMenuOpen ? 'open' : ''}`}></div>
           </button>
-          <span className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>FOCUS.</span>
+          <span className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>SESSION TASK.</span>
         </div>
         <div className="nav-right">
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <span style={{ fontSize: '0.8rem', color: '#888' }} className="user-email">
-                {user.email}
-              </span>
+              <span style={{ fontSize: '0.8rem', color: '#888' }} className="user-email">{user.email}</span>
               <button className="login-btn" onClick={onLogout}>LOGOUT</button>
             </div>
           ) : (
@@ -100,9 +99,6 @@ export default function WeekPage({ user, onLogout }) {
         <div className="menu-inner">
           <ul className="main-nav">
             <li className="nav-item">
-              <a href="#" onClick={() => { navigate('/'); setIsMenuOpen(false); }}>오늘의 할일</a>
-            </li>
-            <li className="nav-item">
               <a href="#" onClick={() => { navigate('/todos'); setIsMenuOpen(false); }}>내 할일</a>
             </li>
             <li className="nav-item">
@@ -111,9 +107,9 @@ export default function WeekPage({ user, onLogout }) {
                 <i className={`ri-add-line ${isScheduleOpen ? 'rotate' : ''}`}></i>
               </div>
               <ul className={`sub-nav ${isScheduleOpen ? 'open' : ''}`}>
-                <li onClick={() => { navigate('/calendar/day'); setIsMenuOpen(false); }}>일별</li>
-                <li onClick={() => { navigate('/calendar/week'); setIsMenuOpen(false); }}>주별</li>
-                <li onClick={() => { navigate('/calendar/month'); setIsMenuOpen(false); }}>월별</li>
+                <li onClick={() => { window.location.href = '/calendar/day'; }}>일별</li>
+                <li onClick={() => { window.location.href = '/calendar/week'; }}>주별</li>
+                <li onClick={() => { window.location.href = '/calendar/month'; }}>월별</li>
               </ul>
             </li>
           </ul>
@@ -122,13 +118,33 @@ export default function WeekPage({ user, onLogout }) {
 
       <main className="content-container">
         <div className="todo-header">
-          <span className="date-label">WEEKLY</span>
-          <h2 className="main-title">{startOfWeek.format('MMMM YYYY')}</h2>
-        </div>
+  <span className="date-label">WEEKLY</span>
+  <div className="month-nav">
+    <button className="month-nav-btn" onClick={() => setCurrentWeek(currentWeek.subtract(1, 'week'))}>
+      <i className="ri-arrow-left-s-line"></i>
+    </button>
+    
+    <h2 className="main-title">{startOfWeek.format('MMMM YYYY')}</h2>
+    
+    <button className="month-nav-btn" onClick={() => setCurrentWeek(currentWeek.add(1, 'week'))}>
+      <i className="ri-arrow-right-s-line"></i>
+    </button>
 
-        <button className="cal-add-btn" onClick={() => { setEditEvent(null); setForm({ title: '', start: dayjs().format('YYYY-MM-DDT09:00'), end: dayjs().format('YYYY-MM-DDT10:00'), description: '' }); setShowForm(true); }}>
-          <i className="ri-add-line"></i> 일정 추가
-        </button>
+    {/* 심플한 플러스 아이콘 버튼 추가 */}
+    <button className="icon-add-btn" title="일정 추가" onClick={() => {
+      setEditEvent(null);
+      setForm({
+        title: '',
+        start: dayjs().format('YYYY-MM-DDT09:00'),
+        end:   dayjs().format('YYYY-MM-DDT10:00'),
+        description: ''
+      });
+      setShowForm(true);
+    }}>
+      <i className="ri-add-circle-line"></i>
+    </button>
+  </div>
+</div>
 
         {showForm && (
           <div className="cal-form">
@@ -147,8 +163,8 @@ export default function WeekPage({ user, onLogout }) {
 
         <div className="cal-week-grid">
           {days.map((day) => {
-            const dayEvents = getEventsForDay(day);
-            const isToday = day.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
+            const dayEvents  = getEventsForDay(day);
+            const isToday    = day.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
             return (
               <div key={day.format()} className={`cal-week-col ${isToday ? 'today' : ''}`}>
                 <div className="cal-week-day-label">
@@ -162,9 +178,12 @@ export default function WeekPage({ user, onLogout }) {
                     dayEvents.map((event) => (
                       <div key={event.id} className="cal-event">
                         <span className="cal-event-title">{event.summary}</span>
-                        <span className="cal-event-time">
-                          {dayjs(event.start.dateTime).format('HH:mm')}
-                        </span>
+                        {event.start?.dateTime && (
+                          <span className="cal-event-time">
+                            {dayjs(event.start.dateTime).format('HH:mm')}
+                            {event.end?.dateTime && ` - ${dayjs(event.end.dateTime).format('HH:mm')}`}
+                          </span>
+                        )}
                         <div className="cal-event-actions">
                           <button onClick={() => handleEditStart(event)}><i className="ri-pencil-line"></i></button>
                           <button onClick={() => handleDelete(event.id)}><i className="ri-close-line"></i></button>

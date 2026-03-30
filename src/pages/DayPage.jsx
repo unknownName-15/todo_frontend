@@ -4,24 +4,23 @@ import dayjs from 'dayjs';
 import api from '../api/axios';
 
 export default function DayPage({ user, onLogout }) {
-  const [events, setEvents]         = useState([]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentDay, setCurrentDay]   = useState(dayjs());
+  const [events, setEvents]           = useState([]);
+  const [isMenuOpen, setIsMenuOpen]   = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
-  const [showForm, setShowForm]     = useState(false);
-  const [form, setForm]             = useState({ title: '', start: '', end: '', description: '' });
-  const [editEvent, setEditEvent]   = useState(null);
+  const [showForm, setShowForm]       = useState(false);
+  const [form, setForm]               = useState({ title: '', start: '', end: '', description: '' });
+  const [editEvent, setEditEvent]     = useState(null);
   const navigate = useNavigate();
-
-  const today = dayjs();
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [currentDay]);
 
   const fetchEvents = async () => {
     try {
-      const start = today.startOf('day').toISOString();
-      const end   = today.endOf('day').toISOString();
+      const start = currentDay.startOf('day').toISOString();
+      const end   = currentDay.endOf('day').toISOString();
       const { data } = await api.get(`/calendar?start=${start}&end=${end}`);
       setEvents(data);
     } catch (e) {
@@ -65,6 +64,8 @@ export default function DayPage({ user, onLogout }) {
     setShowForm(true);
   };
 
+  const isToday = currentDay.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
+
   return (
     <div className="app-wrapper">
       <nav className="top-nav">
@@ -73,14 +74,12 @@ export default function DayPage({ user, onLogout }) {
             <div className={`line ${isMenuOpen ? 'open' : ''}`}></div>
             <div className={`line ${isMenuOpen ? 'open' : ''}`}></div>
           </button>
-          <span className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>FOCUS.</span>
+          <span className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>SESSION TASK.</span>
         </div>
         <div className="nav-right">
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <span style={{ fontSize: '0.8rem', color: '#888' }} className="user-email">
-                {user.email}
-              </span>
+              <span style={{ fontSize: '0.8rem', color: '#888' }} className="user-email">{user.email}</span>
               <button className="login-btn" onClick={onLogout}>LOGOUT</button>
             </div>
           ) : (
@@ -93,9 +92,6 @@ export default function DayPage({ user, onLogout }) {
         <div className="menu-inner">
           <ul className="main-nav">
             <li className="nav-item">
-              <a href="#" onClick={() => { navigate('/'); setIsMenuOpen(false); }}>오늘의 할일</a>
-            </li>
-            <li className="nav-item">
               <a href="#" onClick={() => { navigate('/todos'); setIsMenuOpen(false); }}>내 할일</a>
             </li>
             <li className="nav-item">
@@ -104,9 +100,9 @@ export default function DayPage({ user, onLogout }) {
                 <i className={`ri-add-line ${isScheduleOpen ? 'rotate' : ''}`}></i>
               </div>
               <ul className={`sub-nav ${isScheduleOpen ? 'open' : ''}`}>
-                <li onClick={() => { navigate('/calendar/day'); setIsMenuOpen(false); }}>일별</li>
-                <li onClick={() => { navigate('/calendar/week'); setIsMenuOpen(false); }}>주별</li>
-                <li onClick={() => { navigate('/calendar/month'); setIsMenuOpen(false); }}>월별</li>
+                <li onClick={() => { window.location.href = '/calendar/day'; }}>일별</li>
+                <li onClick={() => { window.location.href = '/calendar/week'; }}>주별</li>
+                <li onClick={() => { window.location.href = '/calendar/month'; }}>월별</li>
               </ul>
             </li>
           </ul>
@@ -115,13 +111,35 @@ export default function DayPage({ user, onLogout }) {
 
       <main className="content-container">
         <div className="todo-header">
-          <span className="date-label">DAILY</span>
-          <h2 className="main-title">{today.format('MMMM D, YYYY')}</h2>
-        </div>
+  <span className="date-label">DAILY</span>
+  <div className="month-nav">
+    <button className="month-nav-btn" onClick={() => setCurrentDay(currentDay.subtract(1, 'day'))}>
+      <i className="ri-arrow-left-s-line"></i>
+    </button>
+    
+    <h2 className="main-title">
+      {isToday ? '오늘' : currentDay.format('M월 D일')}
+    </h2>
+    
+    <button className="month-nav-btn" onClick={() => setCurrentDay(currentDay.add(1, 'day'))}>
+      <i className="ri-arrow-right-s-line"></i>
+    </button>
 
-        <button className="cal-add-btn" onClick={() => { setEditEvent(null); setForm({ title: '', start: today.format('YYYY-MM-DDT09:00'), end: today.format('YYYY-MM-DDT10:00'), description: '' }); setShowForm(true); }}>
-          <i className="ri-add-line"></i> 일정 추가
-        </button>
+    {/* 여기에 플러스 아이콘 버튼을 추가합니다 */}
+    <button className="icon-add-btn" title="일정 추가" onClick={() => {
+      setEditEvent(null);
+      setForm({
+        title: '',
+        start: currentDay.format('YYYY-MM-DDT09:00'),
+        end:   currentDay.format('YYYY-MM-DDT10:00'),
+        description: ''
+      });
+      setShowForm(true);
+    }}>
+      <i className="ri-add-circle-line"></i> {/* 혹은 ri-add-line */}
+    </button>
+  </div>
+</div>
 
         {showForm && (
           <div className="cal-form">
@@ -153,7 +171,8 @@ export default function DayPage({ user, onLogout }) {
                     <div key={event.id} className="cal-event">
                       <span className="cal-event-title">{event.summary}</span>
                       <span className="cal-event-time">
-                        {dayjs(event.start.dateTime).format('HH:mm')} - {dayjs(event.end.dateTime).format('HH:mm')}
+                        {dayjs(event.start.dateTime).format('HH:mm')}
+                        {event.end?.dateTime && ` - ${dayjs(event.end.dateTime).format('HH:mm')}`}
                       </span>
                       <div className="cal-event-actions">
                         <button onClick={() => handleEditStart(event)}><i className="ri-pencil-line"></i></button>

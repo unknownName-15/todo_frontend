@@ -42,14 +42,19 @@ export default function TodoListPage({ user, onLogout }) {
     }
   };
 
-  const handleEdit = async (id, content, due_date) => {
-    try {
-      const { data } = await api.patch(`/todos/${id}`, { content, due_date });
-      setTodos(todos.map((t) => (t.id === id ? data : t)));
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const handleEdit = async (id, content, due_date, start_time, end_time) => {
+  try {
+    const { data } = await api.patch(`/todos/${id}`, {
+      content,
+      due_date,
+      start_time,
+      end_time,
+    });
+    setTodos(todos.map((t) => (t.id === id ? data : t)));
+  } catch (e) {
+    console.error(e);
+  }
+};
 
   const handlePriority = async (id, current) => {
     const next =
@@ -86,7 +91,7 @@ export default function TodoListPage({ user, onLogout }) {
             <div className={`line ${isMenuOpen ? 'open' : ''}`}></div>
           </button>
           <span className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-  FOCUS.
+  SESSION TASK.
 </span>
         </div>
         <div className="nav-right">
@@ -107,11 +112,6 @@ export default function TodoListPage({ user, onLogout }) {
 <div className={`full-menu ${isMenuOpen ? 'active' : ''}`}>
   <div className="menu-inner">
     <ul className="main-nav">
-      <li className="nav-item">
-        <a href="#" onClick={() => { navigate('/'); setIsMenuOpen(false); }}>
-          오늘의 할일
-        </a>
-      </li>
       <li className="nav-item">
         <div className="dropdown-label" onClick={() => setIsScheduleOpen(!isScheduleOpen)}>
           내 일정

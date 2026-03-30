@@ -6,10 +6,16 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onPriority 
   const [dueDate, setDueDate]     = useState(
     todo.due_date ? todo.due_date.slice(0, 10) : ''
   );
+    const [startTime, setStartTime] = useState(
+    todo.start_time ? todo.start_time.slice(0, 5) : ''
+  );
+  const [endTime, setEndTime] = useState(
+    todo.end_time ? todo.end_time.slice(0, 5) : ''
+  );
 
   const handleSave = () => {
     if (value.trim()) {
-      onEdit(todo.id, value.trim(), dueDate || null);
+      onEdit(todo.id, value.trim(), dueDate || null, startTime || null, endTime || null);
     }
     setIsEditing(false);
   };
@@ -17,10 +23,11 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onPriority 
   const handleEditStart = () => {
     setValue(todo.content);
     setDueDate(todo.due_date ? todo.due_date.slice(0, 10) : '');
+    setStartTime(todo.start_time ? todo.start_time.slice(0, 5) : '');
+    setEndTime(todo.end_time ? todo.end_time.slice(0, 5) : '');
     setIsEditing(true);
   };
 
-  // D-day 계산
   const getDday = (due) => {
     if (!due) return null;
     const today = new Date();
@@ -34,11 +41,10 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onPriority 
   };
 
   const dday = getDday(todo.due_date);
-
   const ddayClass =
-    !dday              ? '' :
-    dday === 'D-DAY'   ? 'dday-today' :
-    dday.startsWith('D+') ? 'dday-over' :
+    !dday                  ? '' :
+    dday === 'D-DAY'       ? 'dday-today' :
+    dday.startsWith('D+')  ? 'dday-over'  :
     parseInt(dday.slice(2)) <= 3 ? 'dday-soon' :
     'dday-normal';
 
@@ -47,9 +53,14 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onPriority 
     todo.priority === 'medium' ? 'priority-medium' :
     'priority-none';
 
+  const timeLabel = todo.start_time
+    ? todo.end_time
+      ? `${todo.start_time.slice(0, 5)}~${todo.end_time.slice(0, 5)}`
+      : todo.start_time.slice(0, 5)
+    : null;
+
   return (
     <div className={`todo-item ${todo.is_done ? 'done' : ''}`}>
-      {/* 중요도 동그라미 */}
       <button
         className={`priority-btn ${priorityClass}`}
         onClick={() => onPriority(todo.id, todo.priority)}
@@ -60,10 +71,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onPriority 
         }
       />
 
-      {/* D-day 뱃지 */}
-      {dday && (
-        <span className={`dday-badge ${ddayClass}`}>{dday}</span>
-      )}
+      {dday && <span className={`dday-badge ${ddayClass}`}>{dday}</span>}
 
       {isEditing ? (
         <div className="todo-edit-wrap">
@@ -83,18 +91,34 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onPriority 
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
           />
+          <input
+            type="time"
+            className="time-input"
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+          />
+          <span className="time-sep">~</span>
+          <input
+            type="time"
+            className="time-input"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+          />
           <button className="todo-save" onClick={handleSave}>
             <i className="ri-check-line"></i>
           </button>
         </div>
       ) : (
-        <span
-          className="todo-content"
-          onClick={() => onToggle(todo.id)}
-        >
+        <span className="todo-content" onClick={() => onToggle(todo.id)}>
           {todo.content}
         </span>
       )}
+
+      {!isEditing && timeLabel && (
+  <span className="todo-time-label">
+    <i className="ri-time-line"></i> {timeLabel}
+  </span>
+)}
 
       <div className="todo-actions">
         {!isEditing && (
@@ -107,11 +131,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onPriority 
             <i className="ri-pencil-line"></i>
           </button>
         )}
-        <button
-          className="todo-delete"
-          onClick={() => onDelete(todo.id)}
-          title="삭제"
-        >
+        <button className="todo-delete" onClick={() => onDelete(todo.id)} title="삭제">
           <i className="ri-close-line"></i>
         </button>
       </div>
