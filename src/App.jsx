@@ -259,27 +259,37 @@ function App() {
 
       {/* 전체 화면 메뉴 */}
       <div className={`full-menu ${isMenuOpen ? 'active' : ''}`}>
-        <div className="menu-inner">
-          <ul className="main-nav">
-            <li className="nav-item">
-              <a href="#" onClick={() => { navigate('/todos'); setIsMenuOpen(false); }}>
-                내 할일
-              </a>
-            </li>
-            <li className="nav-item">
-              <div className="dropdown-label" onClick={toggleSchedule}>
-                내 일정
-                <i className={`ri-add-line ${isScheduleOpen ? 'rotate' : ''}`}></i>
-              </div>
-              <ul className={`sub-nav ${isScheduleOpen ? 'open' : ''}`}>
-                <li onClick={() => { window.location.href = '/calendar/day'; }}>일별</li>
-                <li onClick={() => { window.location.href = '/calendar/week'; }}>주별</li>
-                <li onClick={() => { window.location.href = '/calendar/month'; }}>월별</li>
-              </ul>
-            </li>
-          </ul>
+  <div className="menu-inner">
+    <ul className="main-nav">
+      <li className="nav-item">
+        <a href="#" onClick={() => { navigate('/todos'); setIsMenuOpen(false); }}>
+          내 할일
+        </a>
+      </li>
+      <li className="nav-item">
+        <div className="dropdown-label" onClick={toggleSchedule}>
+          내 일정
+          <i className={`ri-add-line ${isScheduleOpen ? 'rotate' : ''}`}></i>
         </div>
-      </div>
+        <ul className={`sub-nav ${isScheduleOpen ? 'open' : ''}`}>
+          <li onClick={() => { window.location.href = '/calendar/day'; }}>일별</li>
+          <li onClick={() => { window.location.href = '/calendar/week'; }}>주별</li>
+          <li onClick={() => { window.location.href = '/calendar/month'; }}>월별</li>
+        </ul>
+      </li>
+      <li className="nav-item">
+        <a href="#" onClick={() => { navigate('/privacy'); setIsMenuOpen(false); }}>
+          개인정보처리방침
+        </a>
+      </li>
+      <li className="nav-item">
+        <a href="#" onClick={() => { navigate('/terms'); setIsMenuOpen(false); }}>
+          서비스 약관
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
 
       {/* 메인 콘텐츠 */}
       <main className="content-container">

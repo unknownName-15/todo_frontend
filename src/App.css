@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
 /* 기본 설정 */
 * {
   margin: 0;
@@ -1232,4 +1234,148 @@ body {
     margin-left: 0;
     margin-top: 10px;
   }
+}
+
+/* ==========================================
+   PRIVACY PAGE STYLES (App.css 하단에 추가)
+   ========================================== */
+
+.privacy-wrapper {
+  max-width: 900px;
+  margin: 60px auto; /* 상단 네비게이션 여백 고려 */
+  padding: 40px 20px;
+  font-family: 'Inter', 'Pretendard', sans-serif;
+  color: #111;
+  line-height: 1.6;
+}
+
+/* 헤더 영역: 굵고 강렬한 타이포그래피 */
+.privacy-header {
+  margin-bottom: 60px;
+  border-bottom: 2px solid #111;
+  padding-bottom: 40px;
+}
+
+.last-updated {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.privacy-title {
+  font-size: clamp(2.5rem, 8vw, 4rem); /* 화면 크기에 따라 폰트 크기 자동 조절 */
+  font-weight: 900;
+  letter-spacing: -3px;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.privacy-intro {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 600px;
+}
+
+/* 본문 섹션 구조: 선을 이용한 정교한 구분 */
+.privacy-section {
+  display: flex;
+  gap: 40px;
+  padding: 40px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.section-num {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #111;
+  min-width: 30px; /* 숫자가 차지하는 최소 공간 확보 */
+}
+
+.section-body {
+  flex: 1;
+}
+
+.section-body h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+  letter-spacing: -0.5px;
+}
+
+.section-body p {
+  color: #444;
+  font-size: 1rem;
+  word-break: keep-all; /* 한글 단어 끊김 방지 */
+}
+
+/* 포인트 요소 스타일 */
+.highlight {
+  background-color: #f0f0f0;
+  padding: 2px 6px;
+  font-weight: 600;
+  border-radius: 4px;
+  color: #111;
+}
+
+.contact-box {
+  margin-top: 20px;
+  display: inline-block;
+  padding: 12px 24px;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  transition: opacity 0.2s;
+}
+
+.contact-box:hover {
+  opacity: 0.8;
+}
+
+/* 반응형 처리: 모바일 환경 대응 */
+@media (max-width: 768px) {
+  .privacy-wrapper {
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  
+  .privacy-section {
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px 0;
+  }
+
+  .privacy-title {
+    letter-spacing: -1.5px;
+  }
+}
+
+/* 돌아가기 네비게이션 스타일 */
+.back-nav {
+  margin-bottom: 40px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #111;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: transform 0.2s ease;
+}
+
+.back-link i {
+  font-size: 1.2rem;
+}
+
+.back-link:hover {
+  transform: translateX(-5px); 
 }
