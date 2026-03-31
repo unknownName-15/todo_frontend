@@ -23,6 +23,7 @@ export default function MonthPage({ user, onLogout }) {
   useEffect(() => {
     fetchEvents();
     fetchHolidays();
+    setSelectedDay(null);
   }, [currentMonth]);
 
   const fetchEvents = async () => {
