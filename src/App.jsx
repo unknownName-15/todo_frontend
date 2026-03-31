@@ -8,6 +8,8 @@ import './App.css';
 import DayPage   from './pages/DayPage';
 import WeekPage  from './pages/WeekPage';
 import MonthPage from './pages/MonthPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage   from './pages/TermsPage';
 
 function App() {
   const navigate = useNavigate();
@@ -467,6 +469,8 @@ function Root() {
     { path: '/calendar/week',   element: <WeekPage  user={user} onLogout={handleLogout} /> },
     { path: '/calendar/month',  element: <MonthPage user={user} onLogout={handleLogout} /> },
     { path: '/auth/callback',   element: <AuthCallback onLogin={(u) => setUser(u)} /> },
+    { path: '/privacy', element: <PrivacyPage /> },
+    { path: '/terms',   element: <TermsPage /> },
   ]);
 
   return routes;
