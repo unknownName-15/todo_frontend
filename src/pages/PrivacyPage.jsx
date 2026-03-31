@@ -17,7 +17,7 @@ export default function PrivacyPage() {
       <p>수집된 개인정보는 제3자에게 제공되지 않습니다.</p>
 
       <h2>5. 문의</h2>
-      <p>개인정보 관련 문의: {'[EMAIL_ADDRESS]'}</p>
+      <p>개인정보 관련 문의: {'imsicode.15@gmail.com'}</p>
     </div>
   );
 }

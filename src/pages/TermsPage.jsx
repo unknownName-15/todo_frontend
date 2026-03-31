@@ -17,7 +17,7 @@ export default function TermsPage() {
       <p>운영자는 사전 공지 없이 서비스를 변경하거나 중단할 수 있습니다.</p>
 
       <h2>5. 문의</h2>
-      <p>서비스 관련 문의: {'[EMAIL_ADDRESS]'}</p>
+      <p>서비스 관련 문의: {'imsicode.15@gmail.com'}</p>
     </div>
   );
 }
