@@ -74,9 +74,9 @@ export default function TodoListPage({ user, onLogout }) {
   const noneTodos   = todos.filter((t) => t.priority === 'none');
 
   const tabs = [
-    { key: 'high',   label: '가장 중요', color: '#e53e3e', list: highTodos },
-    { key: 'medium', label: '중요',      color: '#38a169', list: mediumTodos },
-    { key: 'none',   label: '없음',      color: '#ddd',    list: noneTodos },
+    { key: 'high',   label: '조율 완료', color: '#e53e3e', list: highTodos },
+    { key: 'medium', label: '조율 중',      color: '#38a169', list: mediumTodos },
+    { key: 'none',   label: '공수표',      color: '#ddd',    list: noneTodos },
   ];
 
   const activeList = tabs.find((t) => t.key === activeTab)?.list || [];
@@ -131,24 +131,25 @@ export default function TodoListPage({ user, onLogout }) {
       <main className="content-container">
         <div className="todo-header">
           <span className="date-label">ALL TASKS</span>
-          <h2 className="main-title">내 할일</h2>
+          <h2 className="main-title">일정 목록</h2>
         </div>
 
         {/* 탭 */}
         <div className="priority-tabs">
           {tabs.map((tab) => (
-            <button
+              <button
               key={tab.key}
-              className={`priority-tab ${activeTab === tab.key ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.key)}
-            >
-              <span
-                className="priority-dot"
-                style={{ background: activeTab === tab.key ? tab.color : '#ddd' }}
-              />
-              {tab.label}
-              <span className="priority-tab-count">{tab.list.length}</span>
-            </button>
+                className={`priority-tab ${activeTab === tab.key ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.key)}
+                data-key={tab.key}
+              >
+                <span
+                  className="priority-dot"
+                  style={{ background: activeTab === tab.key ? tab.color : '#ddd' }}
+                />
+                {tab.label}
+                  <span className="priority-tab-count">{tab.list.length}</span>
+              </button>
           ))}
         </div>
 
@@ -156,7 +157,7 @@ export default function TodoListPage({ user, onLogout }) {
         <div className="task-list">
           {activeList.length === 0 ? (
             <div className="empty-state">
-              해당 중요도의 할일이 없습니다.
+              정해진 세션 일정이 없습니다.
             </div>
           ) : (
             activeList.map((todo) => (

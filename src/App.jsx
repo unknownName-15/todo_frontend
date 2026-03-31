@@ -218,7 +218,7 @@ function App() {
 };
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:4000/auth/google';
+    window.location.href = 'https://sessiontask.site/auth/google';
   };
 
   const toggleMenu     = () => setIsMenuOpen(!isMenuOpen);
@@ -304,7 +304,7 @@ function App() {
 
   <input
     type="text"
-    placeholder={user ? '입력 후 Enter를 누르세요.' : '로그인 후 이용할 수 있습니다.'}
+    placeholder={user ? '세션 제목 입력 후 조율 여부를 선택해 주세요.' : '로그인 후 이용할 수 있습니다.'}
     value={input}
     onChange={(e) => setInput(e.target.value)}
     onKeyDown={(e) => e.key === 'Enter' && handleAddTodo()}
@@ -314,7 +314,7 @@ function App() {
   {/* PC: 텍스트 형태 날짜 입력 */}
 <div className="due-date-wrap pc-only" onClick={() => dateInputRef.current.showPicker()}>
   <span className="due-date-label">
-    {dueDate ? dueDate : 'D-day를 입력해 주세요.'}
+    {dueDate ? dueDate : '출발 날짜, 시간 선택'}
   </span>
   <input
     ref={dateInputRef}
@@ -380,12 +380,12 @@ function App() {
         <div className="task-list">
           {!user ? (
             <div className="empty-state">
-              로그인하고 오늘의 할일을<br />시작해 보세요.
+              로그인하고 오늘의 세션 일정을<br />확인해 보세요.
             </div>
           ) : todos.length === 0 && calendarEvents.length === 0 ? (
             <div className="empty-state">
-              아직 계획된 일이 없습니다. <br />
-              새로운 하루를 시작해 보세요.
+              아직 계획된 세션 일정이 없습니다. <br />
+              새로운 세션 일정을 만들어 보세요.
             </div>
           ) : (
             <>

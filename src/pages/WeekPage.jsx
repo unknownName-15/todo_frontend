@@ -130,7 +130,6 @@ export default function WeekPage({ user, onLogout }) {
       <i className="ri-arrow-right-s-line"></i>
     </button>
 
-    {/* 심플한 플러스 아이콘 버튼 추가 */}
     <button className="icon-add-btn" title="일정 추가" onClick={() => {
       setEditEvent(null);
       setForm({

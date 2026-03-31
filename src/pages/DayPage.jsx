@@ -118,7 +118,7 @@ export default function DayPage({ user, onLogout }) {
     </button>
     
     <h2 className="main-title">
-      {isToday ? '오늘' : currentDay.format('M월 D일')}
+      {currentDay.format('MMMM D')}
     </h2>
     
     <button className="month-nav-btn" onClick={() => setCurrentDay(currentDay.add(1, 'day'))}>
