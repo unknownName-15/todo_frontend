@@ -169,12 +169,15 @@ body {
 .input-section {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
   border-bottom: 2px solid #111111;
   margin-bottom: 50px;
 }
 
 .input-section input {
   flex: 1;
+  min-width: 0;
   border: none;
   padding: 20px 0;
   font-size: 1rem;
@@ -298,7 +301,7 @@ body {
 
 .todo-edit-input {
   flex: 1;
-  border: none !important; /* 기존의 투박한 밑줄 제거 */
+  border: none !important;
   background: transparent;
   font-size: 1rem;
   font-family: inherit;
@@ -342,11 +345,11 @@ body {
   pointer-events: none;
 }
 
-/* 일정 조율 버튼 */
+/* 일정 조율 버튼 (기존 동그라미) */
 .priority-btn {
   width: 12px;
   height: 12px;
-  border-radius: 50%;
+  border-radius: 50% !important;
   border: 2px solid #ddd;
   background: transparent;
   cursor: pointer;
@@ -381,12 +384,44 @@ body {
   margin-right: 12px;
 }
 
+/* 사각형 체크박스 스타일 (추가된 부분) */
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.custom-checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #111 !important;
+  background-color: #fff;
+  border-radius: 4px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.custom-checkbox.checked {
+  background-color: #111 !important;
+}
+
+.custom-checkbox i {
+  color: #fff !important;
+  font-size: 0.9rem;
+}
+
+/* ------------------------------------------- */
+
 .todo-edit-wrap {
   display: flex;
   align-items: center;
   flex: 1;
   gap: 12px;
-  background: #f9f9f9; /* 수정 중임을 알리는 아주 연한 배경색 */
+  background: #f9f9f9;
   padding: 8px 12px;
   border-radius: 8px;
   margin-right: 10px;
@@ -439,6 +474,7 @@ body {
   margin-right: 8px;
   flex-shrink: 0;
   letter-spacing: 0.5px;
+  margin-left: 6px;
 }
 
 .dday-normal {
@@ -546,7 +582,6 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 색상 미리보기 원 */
 .hex-picker-preview {
   width: 28px;
   height: 28px;
@@ -556,7 +591,6 @@ body {
   transition: background 0.2s;
 }
 
-/* hex 입력 필드 */
 .hex-picker-input {
   flex: 1;
   border: none;
@@ -575,7 +609,6 @@ body {
   border-bottom-color: #111;
 }
 
-/* 적용 버튼 */
 .hex-picker-apply {
   background: #111;
   color: #fff;
@@ -589,11 +622,8 @@ body {
   flex-shrink: 0;
 }
 
-.hex-picker-apply:hover {
-  background: #333;
-}
+.hex-picker-apply:hover { background: #333; }
 
-/* 취소 버튼 */
 .hex-picker-cancel {
   background: none;
   border: none;
@@ -605,9 +635,7 @@ body {
   transition: color 0.15s;
 }
 
-.hex-picker-cancel:hover {
-  color: #111;
-}
+.hex-picker-cancel:hover { color: #111; }
 
 /* 캘린더 공통 */
 .month-nav {
@@ -616,7 +644,6 @@ body {
   gap: 12px; 
 }
 
-/* 일정 추가 버튼 */
 .icon-add-btn {
   background: none;
   border: none;
@@ -653,16 +680,9 @@ body {
   width: 100%;
 }
 
-.cal-form-row {
-  display: flex;
-  gap: 16px;
-}
+.cal-form-row { display: flex; gap: 16px; }
 
-.cal-form-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 8px;
-}
+.cal-form-actions { display: flex; gap: 12px; margin-top: 8px; }
 
 .cal-form-submit {
   background: #111;
@@ -690,10 +710,7 @@ body {
   border-bottom: 1px solid #f0f0f0;
 }
 
-.cal-event-title {
-  flex: 1;
-  font-size: 1rem;
-}
+.cal-event-title { flex: 1; font-size: 1rem; }
 
 .cal-event-time {
   display: inline-flex;  
@@ -705,7 +722,6 @@ body {
   line-height: 1;        
 }
 
-/* 할일 내용과 시간 사이의 정렬 */
 .todo-content {
   display: flex;
   align-items: center;
@@ -722,16 +738,10 @@ body {
   padding: 4px;
 }
 
-.cal-event-actions button:hover {
-  color: #111;
-}
+.cal-event-actions button:hover { color: #111; }
 
 /* 일별 타임라인 */
-.cal-day-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
+.cal-day-timeline { display: flex; flex-direction: column; gap: 0; }
 
 .cal-day-row {
   display: flex;
@@ -750,12 +760,7 @@ body {
   padding-top: 2px;
 }
 
-.cal-day-events {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+.cal-day-events { flex: 1; display: flex; flex-direction: column; gap: 4px; }
 
 /* 주별 그리드 */
 .cal-week-grid {
@@ -765,16 +770,9 @@ body {
   margin-top: 20px;
 }
 
-.cal-week-col {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+.cal-week-col { display: flex; flex-direction: column; gap: 8px; }
 
-.cal-week-col.today .cal-week-day-label {
-  color: #111;
-  font-weight: 700;
-}
+.cal-week-col.today .cal-week-day-label { color: #111; font-weight: 700; }
 
 .cal-week-day-label {
   display: flex;
@@ -785,17 +783,9 @@ body {
   border-bottom: 1px solid #f0f0f0;
 }
 
-.cal-week-day-name {
-  font-size: 0.7rem;
-  color: #aaa;
-  text-transform: uppercase;
-}
+.cal-week-day-name { font-size: 0.7rem; color: #aaa; text-transform: uppercase; }
 
-.cal-week-day-num {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #111;
-}
+.cal-week-day-num { font-size: 1rem; font-weight: 700; color: #111; }
 
 .cal-week-day-num.today-num {
   background: #111;
@@ -809,17 +799,9 @@ body {
   font-size: 0.85rem;
 }
 
-.cal-week-events {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+.cal-week-events { display: flex; flex-direction: column; gap: 4px; }
 
-.cal-week-empty {
-  font-size: 0.8rem;
-  color: #e5e5e5;
-  text-align: center;
-}
+.cal-week-empty { font-size: 0.8rem; color: #e5e5e5; text-align: center; }
 
 .cal-week-col .cal-event {
   flex-direction: column;
@@ -858,524 +840,259 @@ body {
   transition: 0.15s;
 }
 
-.cal-month-cell:hover {
-  background: #f9f9f9;
-}
+.cal-month-cell:hover { background: #f9f9f9; }
 
-.cal-month-cell.empty {
-  border-color: transparent;
-  cursor: default;
-}
+.cal-month-cell.empty { border-color: transparent; cursor: default; }
 
-.cal-month-cell.today {
-  border-color: #111;
-}
+.cal-month-cell.today { border-color: #111; }
 
-.cal-month-cell.selected {
-  background: #f5f5f5;
-}
+.cal-month-cell.selected { background: #f5f5f5; }
 
-.cal-month-day-num {
-  font-size: 0.85rem;
-  font-weight: 700;
-}
+.cal-month-day-num { font-size: 0.85rem; font-weight: 700; }
 
-/* 오늘 날짜 표시색 */
-.cal-month-cell.today .cal-month-day-num {
-  color: #1100ffb6;
-}
+.cal-month-cell.today .cal-month-day-num { color: #1100ffb6; }
 
-.cal-month-event-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #111;
-}
+.cal-month-event-dot { width: 6px; height: 6px; border-radius: 50%; background: #111; }
 
-.cal-month-more {
-  font-size: 0.7rem;
-  color: #aaa;
-}
+.cal-month-more { font-size: 0.7rem; color: #aaa; }
 
-.cal-selected-day {
-  margin-top: 24px;
-}
+.cal-selected-day { margin-top: 24px; }
 
 .cal-selected-day-title {
   font-size: 1rem;       
   font-weight: 700;
-  margin-bottom: 10px;   
+  margin-bottom: 10px;    
   padding-bottom: 5px;
   border-bottom: 2px solid #111;
 }
 
-.calendar-item {
-  opacity: 0.8;
-}
-
-.calendar-item .todo-content {
-  cursor: default;
-}
+.calendar-item { opacity: 0.8; }
+.calendar-item .todo-content { cursor: default; }
 
 /* 모바일 반응형 */
 @media (max-width: 768px) {
-
-  .user-email {
-    display: none;
-  }
-
-  /* 네비게이션 */
-  .top-nav {
-    padding: 0 20px;
-  }
-
-  /* 메뉴 */
-  .menu-inner {
-    padding: 40px 20px;
-  }
-
-  .nav-item {
-    font-size: 2rem;
-    margin-bottom: 16px;
-  }
-
-  .sub-nav li {
-    font-size: 1.2rem;
-  }
-
-  /* 메인 콘텐츠 */
-  .content-container {
-    margin: 32px auto;
-    padding: 0 16px;
-  }
-
-  .main-title {
-    font-size: 2.5rem;
-    letter-spacing: -2px;
-    margin-bottom: 24px;
-  }
-
-  /* 입력창 */
-  .input-section {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .input-priority {
-    order: 1;
-  }
-
-  .input-section input[type="text"] {
-    order: 2;
-    width: 100%;
-  }
-
-  .due-date-wrap {
-    order: 3;
-  }
-
-  .submit-icon {
-    order: 4;
-  }
-
-  .calendar-item, .todo-item {
-    display: flex;
-    align-items: center;
-    padding: 16px 0;
-    border-bottom: 1px solid #f0f0f0;
-  }
-
-  .todo-content {
-    font-size: 1rem;
-  }
-
-  /* D-day 뱃지 */
-  .dday-badge {
-    font-size: 0.65rem;
-  }
-
-  /* 캘린더 */
-  .cal-week-grid {
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-  }
-
-  .cal-week-col .cal-event {
-    padding: 4px;
-  }
-
-  .cal-event-title {
-    font-size: 0.75rem;
-  }
-
-  .cal-month-cell {
-    min-height: 44px;
-    padding: 4px;
-  }
-
-  .cal-month-day-num {
-    font-size: 0.75rem;
-  }
-
-  .cal-form-row {
-    flex-direction: column;
-  }
-
-  /* 탭 */
-  .priority-tabs {
-    gap: 4px;
-  }
-
-  .priority-tab {
-    padding: 10px 10px;
-    font-size: 0.8rem;
-  }
+  .user-email { display: none; }
+  .top-nav { padding: 0 20px; }
+  .menu-inner { padding: 40px 20px; }
+  .nav-item { font-size: 2rem; margin-bottom: 16px; }
+  .sub-nav li { font-size: 1.2rem; }
+  .content-container { margin: 32px auto; padding: 0 16px; }
+  .main-title { font-size: 2.5rem; letter-spacing: -2px; margin-bottom: 24px; }
+  .input-section { flex-wrap: wrap; gap: 8px; }
+  .input-priority { order: 1; }
+  .input-section input[type="text"] { order: 2; width: 100%; }
+  .due-date-wrap { order: 3; }
+  .submit-icon { order: 4; }
+  .calendar-item, .todo-item { padding: 16px 0; }
+  .todo-content { font-size: 1rem; }
+  .dday-badge { font-size: 0.65rem; }
+  .cal-week-grid { grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal-week-col .cal-event { padding: 4px; }
+  .cal-event-title { font-size: 0.75rem; }
+  .cal-month-cell { min-height: 44px; padding: 4px; }
+  .cal-month-day-num { font-size: 0.75rem; }
+  .cal-form-row { flex-direction: column; }
+  .priority-tabs { gap: 4px; }
+  .priority-tab { padding: 10px 10px; font-size: 0.8rem; }
 }
 
-/* 월 이동 버튼 */
-.month-nav {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
+.month-nav { display: flex; align-items: center; gap: 16px; }
 
 .month-nav-btn {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: #111;
-  padding: 4px;
-  display: flex;
-  align-items: center;
+  background: none; border: none; font-size: 1.8rem; cursor: pointer;
+  color: #111; padding: 4px; display: flex; align-items: center;
 }
 
-.month-nav-btn:hover {
-  color: #555;
-}
+.month-nav-btn:hover { color: #555; }
+.month-nav .main-title { margin-bottom: 0; }
 
-.month-nav .main-title {
-  margin-bottom: 0;
-}
+.red-day { color: #e53e3e; }
+.cal-month-week-label.sunday { color: #e53e3e; }
 
-/* 빨간 날짜 (일요일 / 공휴일) */
-.red-day {
-  color: #e53e3e;
-}
+.holiday-dot { width: 4px; height: 4px; border-radius: 50%; background: #e53e3e; margin: 0 auto; }
+.holiday-label { font-size: 0.75rem; color: #e53e3e; font-weight: 400; margin-left: 8px; }
 
-.cal-month-week-label.sunday {
-  color: #e53e3e;
-}
-
-/* 공휴일 표시 */
-.holiday-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #e53e3e;
-  margin: 0 auto;
-}
-
-.holiday-label {
-  font-size: 0.75rem;
-  color: #e53e3e;
-  font-weight: 400;
-  margin-left: 8px;
-}
-
-/* PC/모바일 전환 */
-.pc-only {
-  display: flex;
-}
-
-.mobile-only-flex {
-  display: none;
-}
-
-.cal-icon-active {
-  color: #111;
-}
+.pc-only { display: flex; }
+.mobile-only-flex { display: none; }
+.cal-icon-active { color: #111; }
 
 @media (max-width: 768px) {
-  .pc-only {
-    display: none;
-  }
-
+  .pc-only { display: none; }
   .mobile-only-flex {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    cursor: pointer;
-    font-size: 1.4rem;
-    color: #aaa;
-    position: relative;
-    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; cursor: pointer; font-size: 1.4rem;
+    color: #aaa; position: relative; flex-shrink: 0;
   }
 }
 
-/* 시간 입력부 컨테이너 */
 .time-inputs-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 15px;
-  background: #f8f8f8; 
-  border-radius: 8px;
-  height: 40px;
-  margin-left: 10px;
-  transition: all 0.3s ease;
+  display: flex; align-items: center; gap: 12px; padding: 0 15px;
+  background: #f8f8f8; border-radius: 8px; height: 40px;
+  margin-left: 10px; transition: all 0.3s ease;
 }
 
-.time-inputs-container:hover {
-  background: #f0f0f0;
-}
-
-/* 시간 입력 필드 내부 */
-.time-field {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.time-icon {
-  font-size: 0.9rem;
-  color: #aaa;
-}
-
+.time-field { display: flex; align-items: center; gap: 5px; }
+.time-icon { font-size: 0.9rem; color: #aaa; }
 .time-input {
-  border: none !important;
-  background: transparent !important;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #333;
-  width: 75px;
-  padding: 0 !important;
-  cursor: pointer;
-  outline: none;
+  border: none !important; background: transparent !important;
+  font-family: 'Inter', sans-serif; font-size: 0.85rem;
+  font-weight: 600; color: #333; width: 75px; padding: 0 !important;
+  cursor: pointer; outline: none;
 }
+.time-input::-webkit-calendar-picker-indicator { display: none; }
+.time-separator { font-size: 0.8rem; color: #ccc; font-weight: 300; }
 
-/* 크롬/사파리에서 시간 입력창의 시계 아이콘 숨기기 */
-.time-input::-webkit-calendar-picker-indicator {
-  display: none;
-}
-
-.time-separator {
-  font-size: 0.8rem;
-  color: #ccc;
-  font-weight: 300;
-}
-
-/* 할일 목록에 표시되는 시간 라벨 디자인 */
 .todo-time-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.8rem;
-  color: #aaa;
-  white-space: nowrap;
-  margin-right: 8px;
-  line-height: 1;
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.8rem; color: #aaa; white-space: nowrap;
+  margin-right: 8px; line-height: 1;
 }
 
 .custom-time-picker {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #f4f4f4;
-  padding: 8px 16px;
-  border-radius: 30px;
-  margin-left: 15px;
+  display: flex; align-items: center; gap: 10px;
+  background: #f4f4f4; padding: 8px 16px; border-radius: 30px; margin-left: 15px;
 }
 
-.time-select-group {
-  display: flex;
-  gap: 4px;
-}
-
+.time-select-group { display: flex; gap: 4px; }
 .time-select-group select {
-  appearance: none;
-  background: transparent;
-  border: none;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #111;
-  cursor: pointer;
-  text-align: center;
-  padding: 2px 4px;
-  outline: none;
+  appearance: none; background: transparent; border: none;
+  font-family: 'Inter', sans-serif; font-size: 0.85rem;
+  font-weight: 700; color: #111; cursor: pointer;
+  text-align: center; padding: 2px 4px; outline: none;
 }
+.time-select-group select:hover { color: #4285F4; }
+.time-dash { font-size: 0.8rem; color: #bbb; font-weight: 300; }
+.time-select-group select option { background: #fff; color: #111; }
 
-/* 마우스 올렸을 때 살짝 강조 */
-.time-select-group select:hover {
-  color: #4285F4;
-}
-
-.time-dash {
-  font-size: 0.8rem;
-  color: #bbb;
-  font-weight: 300;
-}
-
-/* 셀렉트 박스 내부 옵션 스타일 */
-.time-select-group select option {
-  background: #fff;
-  color: #111;
-}
-
-/* 모바일 대응: 스크롤이 더 편하게 크게 만들기 */
 @media (max-width: 768px) {
-  .custom-time-picker {
-    width: 100%;
-    justify-content: center;
-    margin-left: 0;
-    margin-top: 10px;
-  }
+  .custom-time-picker { width: 100%; justify-content: center; margin-left: 0; margin-top: 10px; }
 }
 
 /* ==========================================
-   PRIVACY PAGE STYLES (App.css 하단에 추가)
+    PRIVACY PAGE STYLES
    ========================================== */
-
 .privacy-wrapper {
-  max-width: 900px;
-  margin: 60px auto; /* 상단 네비게이션 여백 고려 */
-  padding: 40px 20px;
-  font-family: 'Inter', 'Pretendard', sans-serif;
-  color: #111;
-  line-height: 1.6;
+  max-width: 900px; margin: 60px auto; padding: 40px 20px;
+  font-family: 'Inter', 'Pretendard', sans-serif; color: #111; line-height: 1.6;
 }
 
-/* 헤더 영역: 굵고 강렬한 타이포그래피 */
-.privacy-header {
-  margin-bottom: 60px;
-  border-bottom: 2px solid #111;
-  padding-bottom: 40px;
-}
+.privacy-header { margin-bottom: 60px; border-bottom: 2px solid #111; padding-bottom: 40px; }
+.last-updated { font-size: 0.75rem; font-weight: 700; color: #888; display: block; margin-bottom: 10px; }
+.privacy-title { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 900; letter-spacing: -3px; margin-bottom: 20px; text-transform: uppercase; line-height: 1; }
+.privacy-intro { font-size: 1.1rem; color: #555; max-width: 600px; }
 
-.last-updated {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #888;
-  letter-spacing: 1px;
-  display: block;
-  margin-bottom: 10px;
-}
+.privacy-section { display: flex; gap: 40px; padding: 40px 0; border-bottom: 1px solid #e5e5e5; }
+.section-num { font-size: 0.9rem; font-weight: 800; color: #111; min-width: 30px; }
+.section-body { flex: 1; }
+.section-body h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; }
+.section-body p { color: #444; font-size: 1rem; word-break: keep-all; }
 
-.privacy-title {
-  font-size: clamp(2.5rem, 8vw, 4rem); /* 화면 크기에 따라 폰트 크기 자동 조절 */
-  font-weight: 900;
-  letter-spacing: -3px;
-  margin: 0 0 20px 0;
-  text-transform: uppercase;
-  line-height: 1;
-}
+.highlight { background-color: #f0f0f0; padding: 2px 6px; font-weight: 600; border-radius: 4px; }
+.contact-box { margin-top: 20px; display: inline-block; padding: 12px 24px; background: #111; color: #fff; font-weight: 600; }
 
-.privacy-intro {
-  font-size: 1.1rem;
-  color: #555;
-  max-width: 600px;
-}
-
-/* 본문 섹션 구조: 선을 이용한 정교한 구분 */
-.privacy-section {
-  display: flex;
-  gap: 40px;
-  padding: 40px 0;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.section-num {
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: #111;
-  min-width: 30px; /* 숫자가 차지하는 최소 공간 확보 */
-}
-
-.section-body {
-  flex: 1;
-}
-
-.section-body h2 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin-bottom: 15px;
-  letter-spacing: -0.5px;
-}
-
-.section-body p {
-  color: #444;
-  font-size: 1rem;
-  word-break: keep-all; /* 한글 단어 끊김 방지 */
-}
-
-/* 포인트 요소 스타일 */
-.highlight {
-  background-color: #f0f0f0;
-  padding: 2px 6px;
-  font-weight: 600;
-  border-radius: 4px;
-  color: #111;
-}
-
-.contact-box {
-  margin-top: 20px;
-  display: inline-block;
-  padding: 12px 24px;
-  background: #111;
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
-  transition: opacity 0.2s;
-}
-
-.contact-box:hover {
-  opacity: 0.8;
-}
-
-/* 반응형 처리: 모바일 환경 대응 */
 @media (max-width: 768px) {
-  .privacy-wrapper {
-    margin: 40px auto;
-    padding: 0 20px;
-  }
-  
-  .privacy-section {
-    flex-direction: column;
-    gap: 10px;
-    padding: 30px 0;
-  }
-
-  .privacy-title {
-    letter-spacing: -1.5px;
-  }
+  .privacy-wrapper { margin: 40px auto; }
+  .privacy-section { flex-direction: column; gap: 10px; }
 }
 
-/* 돌아가기 네비게이션 스타일 */
-.back-nav {
-  margin-bottom: 40px;
+.back-nav { margin-bottom: 40px; }
+.back-link { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #111; font-weight: 700; font-size: 0.8rem; }
+.back-link:hover { transform: translateX(-5px); transition: 0.2s; }
+
+/* ------------------------------------------- */
+/* 할 일 아이템 체크박스 정렬 보정 */
+.task-item {
+  display: flex; align-items: center; gap: 15px;
+  padding: 18px 0; border-bottom: 1px solid #f0f0f0;
+}
+.task-text { font-size: 1.1rem; font-weight: 500; color: #111; }
+.task-item.completed .task-text { color: #aaa; text-decoration: line-through; }
+
+/* 조율 상태 토글 버튼 */
+.priority-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
-.back-link {
-  display: inline-flex;
+.priority-toggle-btn {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: #111;
-  font-size: 0.8rem;
+  gap: 4px;
+  background: none;
+  border: 1.5px solid #ddd;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 1px;
-  transition: transform 0.2s ease;
+  letter-spacing: 0.3px;
+  color: #aaa;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+  line-height: 1.4;
 }
 
-.back-link i {
-  font-size: 1.2rem;
+.priority-toggle-btn .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: 0.2s;
 }
 
-.back-link:hover {
-  transform: translateX(-5px); 
+/* 비활성 상태에서도 색상 고정 */
+.priority-toggle-btn:first-child {
+  border-color: #e53e3e;
+  color: #e53e3e;
+}
+.priority-toggle-btn:first-child .dot {
+  background: #e53e3e;
+}
+.priority-toggle-btn:last-child {
+  border-color: #38a169;
+  color: #38a169;
+}
+.priority-toggle-btn:last-child .dot {
+  background: #38a169;
+}
+
+/* 선택됐을 때 배경 채우기 */
+.priority-toggle-btn.active-high {
+  background: #e53e3e;
+  color: #fff;
+}
+.priority-toggle-btn.active-high .dot {
+  background: #fff;
+}
+.priority-toggle-btn.active-medium {
+  background: #38a169;
+  color: #fff;
+}
+.priority-toggle-btn.active-medium .dot {
+  background: #fff;
+}
+
+/* 아이템 내 조율 상태 뱃지 */
+.priority-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1.5px solid #ddd;
+  color: #aaa;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: 0.2s;
+  background: none;
+}
+.priority-badge.badge-high {
+  border-color: #e53e3e;
+  color: #e53e3e;
+}
+.priority-badge.badge-medium {
+  border-color: #38a169;
+  color: #38a169;
 }
